@@ -54,10 +54,9 @@ if [[ ! -e /var/www/html/inventory.html ]]; then
 fi
 echo "Inventory.html File Check completed successfully"
 
-
 # To get the details from S3 bucket and push to Inventory.html
-aws s3 ls s3://upgrad-suyog | tee -a inventory.html
-echo "S3 Bucket details pushed in Inventory.html successfully"
+fsize=`du -hs /tmp/$myname-httpd-logs-$timestamp.tar | awk '{ print $1 }'`
+echo "httpd-logs $timestamp tar $fsize" >> /var/www/html/inventory.html
 
 # To check whether cron Job file is present in /etc/cron.d/ and if not present then to create the file with asked details
 if [ ! -f "/etc/cron.d/automation" ]
