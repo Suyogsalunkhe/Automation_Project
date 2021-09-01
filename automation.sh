@@ -44,3 +44,23 @@ Size=$(du -sh /tmp/${myname}-httpd-logs-${timestamp}.tar | awk '{print $1}' )
 echo "Tar file  has been created at specific location"
 aws s3 cp /tmp/${myname}-httpd-logs-${timestamp}.tar s3://$s3_bucket/${myname}-httpd-logs-${timestamp}.tar
 echo "Tar file with logs has been copied to AWSS3 bucket"
+
+#Task 3
+#!/bin/bash
+
+#To check whether cron Job file is present in /var/www/html/ and if not present then to create the file
+if [[ ! -e /var/www/html/inventory.html ]]; then
+    > /var/www/html/inventory.html
+fi
+echo "Inventory.html File Check completed successfully"
+
+
+# To get the details from S3 bucket and push to Inventory.html
+aws s3 ls s3://upgrad-suyog | tee -a inventory.html
+echo "S3 Bucket details pushed in Inventory.html successfully"
+
+# To check whether cron Job file is present in /etc/cron.d/ and if not present then to create the file with asked details
+if [ ! -f "/etc/cron.d/automation" ]
+then
+        echo "* * * * * root    /root/Automation_Project/Automation_Project/automation.sh" >> /etc/cron.d/automation
+fi
